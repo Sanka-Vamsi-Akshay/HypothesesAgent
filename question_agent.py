@@ -21,8 +21,8 @@ def generate_followup_questions(problem, qa_data):
 Problem: {problem}
 Previous Q&A: {qa_data}
 
-Based on the answers, if you have gathered enough definitive evidence to pinpoint the EXACT root cause with HIGH confidence, respond with EXACTLY "DONE". 
-Do NOT reply with "DONE" if you are guessing or if the cause is still unknown. Instead, generate 2-3 new, completely different diagnostic yes/no/don't know questions to narrow down the problem in a new direction. List each question on a new line.
+Based on the answers, if you have gathered enough definitive evidence to pinpoint the EXACT root cause with HIGH confidence, you MUST respond with the single word "DONE" and nothing else.
+If you do NOT know the exact root cause yet, generate 2-3 new, completely different diagnostic yes/no/don't know questions to narrow down the problem. Do NOT output the word "DONE" anywhere in your response if you are asking questions. List each question on a new line.
 """
     text = run_llm(prompt).strip()
     if "DONE" in text.upper():
