@@ -20,7 +20,7 @@ def get_groq_client():
         
     return Groq(api_key=api_key)
 
-def run_llm(prompt, model=MODEL_NAME):
+def run_llm(prompt, model=MODEL_NAME, json_mode=False):
     """
     Run the Groq cloud model API using the Groq Python SDK.
     """
@@ -30,20 +30,25 @@ def run_llm(prompt, model=MODEL_NAME):
         return "Error: GROQ_API_KEY not found. Please set your API key in Streamlit secrets or as an environment variable."
         
     try:
-        chat_completion = client.chat.completions.create(
-            messages=[
+        params = {
+            "messages": [
                 {
                     "role": "system",
-                    "content": "You are a helpful AI diagnostic assistant."
+                    "content": "You are a helpful AI diagnostic assistant. Always output JSON if requested."
                 },
                 {
                     "role": "user",
                     "content": prompt,
                 }
             ],
-            model=model,
-            temperature=0.3,
-        )
+            "model": model,
+            "temperature": 0.3,
+        }
+        
+        if json_mode:
+            params["response_format"] = {"type": "json_object"}
+            
+        chat_completion = client.chat.completions.create(**params)
         return chat_completion.choices[0].message.content.strip()
     except Exception as e:
         print(f"Error connecting to Groq API: {e}")
