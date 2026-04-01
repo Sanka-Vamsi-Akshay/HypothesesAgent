@@ -57,9 +57,9 @@ You MUST respond with ONLY a valid JSON object in this precise format, containin
 }}
 
 RULES:
-1. If you have ANY plausible theory or hint of what the root cause is, YOU MUST set "is_done": true. It is much better to stop early and give a conclusion than to annoy the user with too many questions.
-2. If the user has already answered 3 or more questions, you MUST set "is_done": true. Do NOT ask more questions if the Q&A list is getting long.
-3. Only set "is_done": false if you have NO IDEA what the problem is and fewer than 3 questions have been asked.
+1. If you have gathered enough strong evidence to act on a solid working hypothesis, you MUST set "is_done": true and leave "questions" empty. It is better to give an answer early than ask too many questions.
+2. If you still need more information to narrow down the root cause, set "is_done": false and provide 2-3 completely NEW, highly distinct diagnostic questions.
+3. Be completely objective: do not repeat previous questions and do not ask trivial questions just to fill space.
 """
     text = run_llm(prompt, json_mode=True)
     data = extract_json(text)
