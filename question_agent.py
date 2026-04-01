@@ -18,7 +18,7 @@ def generate_initial_questions(problem):
     prompt = f"""
 Problem: {problem}
 
-Generate 4-5 diagnostic yes/no/don't know questions.
+Generate 4-5 completely different diagnostic yes/no/don't know questions to find the root cause.
 Output ONLY a valid JSON object in this exact format, with no preamble or markdown formatting:
 {{
   "questions": [
@@ -27,7 +27,7 @@ Output ONLY a valid JSON object in this exact format, with no preamble or markdo
   ]
 }}
 """
-    text = run_llm(prompt)
+    text = run_llm(prompt, json_mode=True)
     data = extract_json(text)
     if data and "questions" in data:
         return data["questions"]
@@ -45,7 +45,7 @@ def generate_followup_questions(problem, qa_data):
 Problem: {problem}
 Previous Q&A: {qa_data}
 
-Based on the answers thus far, determine if you have gathered enough definitive evidence to pinpoint the EXACT root cause with HIGH confidence.
+Based on the answers thus far, determine if you have gathered enough evidence to form a working hypothesis. 
 
 You MUST respond with ONLY a valid JSON object in this precise format, containing no extra text or markdown:
 {{
@@ -57,10 +57,10 @@ You MUST respond with ONLY a valid JSON object in this precise format, containin
 }}
 
 RULES:
-1. If you know the exact root cause, set "is_done": true and leave the "questions" list empty.
-2. If you do NOT know the exact root cause yet, set "is_done": false and provide 2-3 completely NEW diagnostic yes/no/don't know questions.
+1. If you have even a SOLID GUESS or a working hypothesis for the root cause, set "is_done": true and leave the "questions" list empty! We do not want to bore the user with too many questions. Once a good target is identified, stop.
+2. If the problem is still entirely mysterious, set "is_done": false and provide 2-3 completely NEW, highly distinct diagnostic questions. Do not repeat previous questions!
 """
-    text = run_llm(prompt)
+    text = run_llm(prompt, json_mode=True)
     data = extract_json(text)
     
     if data is not None:
