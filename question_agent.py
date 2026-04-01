@@ -49,6 +49,7 @@ Based on the answers thus far, determine if you have gathered enough evidence to
 
 You MUST respond with ONLY a valid JSON object in this precise format, containing no extra text or markdown:
 {{
+  "reasoning": "Analyze the Q&A here. Do we have a strong hint for the root cause? Explain briefly.",
   "is_done": true or false,
   "questions": [
     "Q1?",
@@ -57,9 +58,9 @@ You MUST respond with ONLY a valid JSON object in this precise format, containin
 }}
 
 RULES:
-1. If you have gathered enough strong evidence to act on a solid working hypothesis, you MUST set "is_done": true and leave "questions" empty. It is better to give an answer early than ask too many questions.
-2. If you still need more information to narrow down the root cause, set "is_done": false and provide 2-3 completely NEW, highly distinct diagnostic questions.
-3. Be completely objective: do not repeat previous questions and do not ask trivial questions just to fill space.
+1. First, write your "reasoning". If the Q&A points to a highly probable root cause (e.g. you know what's wrong), YOU MUST set "is_done": true and leave "questions" empty. We WANT you to finish as early as possible.
+2. If the problem is still a complete mystery and you genuinely need more evidence, set "is_done": false and provide 2-3 completely NEW diagnostic questions.
+3. Do not ask trivial questions. If you can make a diagnosis now, stop asking.
 """
     text = run_llm(prompt, json_mode=True)
     data = extract_json(text)
