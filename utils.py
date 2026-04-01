@@ -3,8 +3,8 @@ import os
 import streamlit as st
 from groq import Groq
 
-# Use Llama-3 8b for fast, free generation
-MODEL_NAME = "llama3-8b-8192"
+# Use Llama-3.1 8b for fast, free generation
+MODEL_NAME = "llama-3.1-8b-instant"
 
 def get_groq_client():
     # Try to get API key from Streamlit secrets (for cloud deployment)
